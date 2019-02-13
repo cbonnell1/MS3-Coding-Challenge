@@ -1,0 +1,161 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cvstosqlite;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.sqlite.util.StringUtils;
+
+public class CSVLoader {
+
+	private static String JDBC_CONNECTION_URL = 
+			"jdbc:sqlite:test.db";
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String csvFile = "ThisPC/Desktop/ms3Interview.csv";
+	        BufferedReader br = null;
+	        String line = "";
+	        String csvSplitBy = ",";
+	        boolean headRowExists = true;
+	        int acceptedNumberofColumns = 10;
+	        int incorrectRecords = 0;
+	        String[] tableContents = null;
+	      //Create List for holding TableContents objects
+            List<TableContents> tableContentsList = new ArrayList<TableContents>();
+	        
+	        try {
+				br = new BufferedReader(new FileReader(csvFile));
+				
+				           
+	            if(headRowExists) {
+	            	String headRow = br.readLine();
+	         
+	            	if(headRow==null || headRow.isEmpty()) {
+	            		throw new FileNotFoundException(
+	        					"No columns defined in given CSV file." +
+	        					"Please check the CSV file format.");
+	            	}
+	            }
+	            
+				 while ((line = br.readLine()) != null) {
+
+		                // use comma as separator
+		                tableContents = line.split(csvSplitBy);
+		                
+		                if(tableContents.length > 0 && tableContents.length == acceptedNumberofColumns)
+		                {
+		                    //Save the tableContents details in tableContents object
+		                    TableContents tbl = new TableContents(Integer.parseInt(tableContents[0]),
+		                    		tableContents[1],tableContents[2],tableContents[3],
+		                            Integer.parseInt(tableContents[4]),Integer.parseInt(tableContents[5]),
+                                            tableContents[6],tableContents[7],tableContents[8],tableContents[9]);
+		                    tableContentsList.add(tbl);
+		                }
+		                else {
+		                	
+		                	incorrectRecords++;
+		                }   
+				 }
+	                
+	                LoadCSVintoDatabase(tableContentsList);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+	        
+	        
+	        System.out.println("Following are the statistics :\n#"+
+	        		tableContents.length+" of records received.\n#"+
+	        		tableContentsList.size()+" of records processed.\n#"+
+	        		incorrectRecords+" of records failed.");
+	}
+
+	private static void LoadCSVintoDatabase(List<TableContents> tableContentsList) {
+		// TODO Auto-generated method stub
+		
+		Connection connection = null;
+		boolean tableExists = true;
+		boolean truncateTable = true;
+		
+		try {
+			//Class.forName("org.sqlite.JDBC");
+			
+			connection = DriverManager.getConnection(JDBC_CONNECTION_URL);
+			
+			if(tableExists != true) {
+				connection.createStatement().execute("create table tableContents(firstName, lastName, email, gender, image, paymentType, amount, firstBoolean, secondBoolean, location)");
+			}
+			
+			if(truncateTable == true) {
+				connection.createStatement().execute("delete from tableContents");
+			}
+				
+			
+			PreparedStatement stmt =
+					connection.prepareStatement("insert into tableContents (firstName, lastName, email, gender, image, paymentType, amount, firstBoolean, secondBoolean, location) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			
+			for(TableContents e : tableContentsList)
+            {
+				
+				stmt.setString(2, e.getFirstName());
+				stmt.setString(3, e.getLastName());
+				stmt.setString(4, e.getEmail());
+				stmt.setInt(5, e.getGender());
+				stmt.setInt(6, e.getImage());
+				stmt.setString(7, e.getPaymentType());
+				stmt.setString(8, e.getAmount());
+                                stmt.setString(8, e.getFirstBoolean());
+                                stmt.setString(8, e.getSecondBoolean());
+                                stmt.setString(8, e.getLocation());
+				
+				stmt.executeUpdate();
+            }
+			
+			System.out.println("Result of SELECT\n");
+			
+			ResultSet rs = connection.createStatement().executeQuery("select * from tableContents");
+			
+			while(rs.next()) {
+				String firstName = rs.getString(1);
+				String lastName = rs.getString(2);
+				String email = rs.getString(3);
+				String gender = rs.getString(4);
+				String image = rs.getString(5);
+				String paymentType = rs.getString(6);
+				int amount = rs.getInt(7);
+                                String firstBoolean = rs.getString(8);
+                                String secondBoolean = rs.getString(9);
+                                String location = rs.getString(10);
+				
+				System.out.println(firstName+"\t"+lastName+"\t"+email+"\t"+gender+"\t"
+				+image+"\t"+paymentType+"\t"+amount+"\t"+firstBoolean+"\t"+secondBoolean+"\t"+location);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}

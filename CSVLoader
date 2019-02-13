@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cvstosqlite;
 
 import java.io.BufferedReader;
@@ -19,6 +15,7 @@ import java.util.List;
 
 import org.sqlite.util.StringUtils;
 
+// create a class to load the CSV file into a table
 public class CSVLoader {
 
 	private static String JDBC_CONNECTION_URL = 
@@ -26,18 +23,20 @@ public class CSVLoader {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// Find the file on your computer
 		String csvFile = "ThisPC/Desktop/ms3Interview.csv";
 	        BufferedReader br = null;
 	        String line = "";
 	        String csvSplitBy = ",";
 	        boolean headRowExists = true;
+		// make sure there are 10 columns in the table
 	        int acceptedNumberofColumns = 10;
 	        int incorrectRecords = 0;
 	        String[] tableContents = null;
 	      //Create List for holding TableContents objects
             List<TableContents> tableContentsList = new ArrayList<TableContents>();
 	        
+		// try to catch data sets that do not fit
 	        try {
 				br = new BufferedReader(new FileReader(csvFile));
 				
@@ -67,7 +66,7 @@ public class CSVLoader {
 		                    tableContentsList.add(tbl);
 		                }
 		                else {
-		                	
+		                	// add to counter of incorrect records
 		                	incorrectRecords++;
 		                }   
 				 }
@@ -82,7 +81,7 @@ public class CSVLoader {
 			}
 	        
 	        
-	        
+	        // print out the statistics
 	        System.out.println("Following are the statistics :\n#"+
 	        		tableContents.length+" of records received.\n#"+
 	        		tableContentsList.size()+" of records processed.\n#"+
@@ -116,16 +115,16 @@ public class CSVLoader {
 			for(TableContents e : tableContentsList)
             {
 				
-				stmt.setString(2, e.getFirstName());
-				stmt.setString(3, e.getLastName());
-				stmt.setString(4, e.getEmail());
-				stmt.setInt(5, e.getGender());
-				stmt.setInt(6, e.getImage());
-				stmt.setString(7, e.getPaymentType());
-				stmt.setString(8, e.getAmount());
+				stmt.setString(1, e.getFirstName());
+				stmt.setString(2, e.getLastName());
+				stmt.setString(3, e.getEmail());
+				stmt.setInt(4, e.getGender());
+				stmt.setInt(5, e.getImage());
+				stmt.setString(6, e.getPaymentType());
+				stmt.setString(7, e.getAmount());
                                 stmt.setString(8, e.getFirstBoolean());
-                                stmt.setString(8, e.getSecondBoolean());
-                                stmt.setString(8, e.getLocation());
+                                stmt.setString(9, e.getSecondBoolean());
+                                stmt.setString(10, e.getLocation());
 				
 				stmt.executeUpdate();
             }

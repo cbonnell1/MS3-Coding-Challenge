@@ -1,0 +1,125 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cvstosqlite;
+
+/**
+ *
+ * @author Chris
+ */
+// TableContents class
+public class TableContents {
+	
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String gender;
+	private String image;
+	private String paymentType;
+	private int amount;
+        private boolean firstBoolean;
+        private boolean secondBoolean;
+        private String location;
+	
+	public TableContents(String firstName,String lastName,
+	 String email,String gender,String image,String paymentType,
+	 int amount,boolean firstBoolean,boolean secondBoolean,String location) {
+		
+		super();
+		this.firstName=firstName;
+		this.lastName=lastName;
+		this.email=email;
+		this.gender=gender;
+		this.image=image;
+		this.paymentType=paymentType;
+		this.amount=amount;
+                this.firstBoolean=firstBoolean;
+                this.secondBoolean=secondBoolean;
+                this.location=location;
+	}
+
+	public int getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastname) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public int getImage() {
+		return Image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+        
+        public String getFirstBoolean() {
+		return firstBoolean;
+	}
+
+	public void setFirstBoolean(boolean firstBoolean) {
+		this.firstBoolean = firstBoolean;
+	}
+        
+        public String getSecondBoolean() {
+		return secondBoolean;
+	}
+
+	public void setSecondBoolean(boolean secondBoolean) {
+		this.secondBoolean = secondBoolean;
+	}
+        
+        public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	
+	
+
+}

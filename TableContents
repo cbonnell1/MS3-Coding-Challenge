@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cvstosqlite;
 
-/**
- *
- * @author Chris
- */
 // TableContents class
 public class TableContents {
 	
@@ -40,7 +32,7 @@ public class TableContents {
                 this.location=location;
 	}
 
-	public int getFirstName() {
+	public String getFirstName() {
 		return firstName;
 	}
 
